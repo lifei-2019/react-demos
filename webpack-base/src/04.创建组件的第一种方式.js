@@ -2,8 +2,15 @@
 import React from 'react'   //创建组件、虚拟DOM元素，生命周期
 import ReactDOM from 'react-dom'    //把创建好的组件和虚拟DOM放到页面上展示
 
-//默认，如果不做单独配置的话，不能省略.jsx后缀名
-import Hello from './components/Hello.jsx'
+//第一种创建组建的方式
+function Hello(props){
+    //如果在一个组件中return一个null，则表示此组件是空的，什么都不会渲染
+    //return null
+    console.log(props)
+    //props.name = 'zs'
+    //组件中的props都是只读的，不能被重新赋值。
+    return <div>zheshige hello -- ｛props.name｝</div>
+}
 
 
 const dog = {
