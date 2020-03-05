@@ -19,12 +19,12 @@ module.exports = {
     },
     output: {
         path: path.resolve(process.cwd(),"dist"),
-        filename: 'static/js/[name].[chunkHash:8].js'
+        filename: 'static/js/[name].[hash:8].js'        //可以用chunkHash同一次操作每个文件都不一样
     },           
     plugins: [
         htmlPlugin,
         new MiniCssExtractPlugin({
-            filename: 'static/css/[name].[chunkHash:8].css',
+            filename: 'static/css/[name].[hash:8].css',
         })
     ],
     module: {
