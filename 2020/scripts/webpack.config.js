@@ -33,7 +33,23 @@ module.exports = {
                 test:/\.css$/,
                 use: [
                     MiniCssExtractPlugin.loader,
-                    'css-loader'                    //后写的先执行
+                    'css-loader',
+                    'postcss-loader'                  //后写的先执行,postcssloader一定要写在后面
+                ],
+                exclude: /node_modules/
+            },
+            {
+                test:/\.less$/,
+                use: [
+                    MiniCssExtractPlugin.loader,
+                    'css-loader',
+                    'postcss-loader' ,
+                    {
+                        loader:'less-loader',
+                        options:{
+                            
+                        } 
+                    }                   //和上面对比两种写法
                 ],
                 exclude: /node_modules/
             },
