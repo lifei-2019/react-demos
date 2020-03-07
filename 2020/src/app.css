@@ -1,8 +1,0 @@
-body{
-    color: pink;
-    background-image: url(./assets/gundum.jpg) 0 0 no-repeat;
-}
-
-::placeholder{
-    color: #999;
-}

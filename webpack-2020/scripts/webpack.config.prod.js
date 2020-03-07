@@ -1,6 +1,7 @@
 const path = require('path')
 const HtmlWebPackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require("mini-css-extract-plugin") 
+const CopyPlugin = require('copy-webpack-plugin');
 
 //创建一个插件的实例对象
 const htmlPlugin = new HtmlWebPackPlugin({
@@ -19,13 +20,17 @@ module.exports = {
     },
     output: {
         path: path.resolve(process.cwd(),"dist"),
-        filename: 'static/js/[name].[hash:8].js'        //可以用chunkHash同一次操作每个文件都不一样
+        filename: 'js/[name].[hash:8].js'        //可以用chunkHash同一次操作每个文件都不一样
     },           
     plugins: [
         htmlPlugin,
         new MiniCssExtractPlugin({
-            filename: 'static/css/[name].[hash:8].css',
-        })
+            filename: 'css/[name].[hash:8].css',
+        }),
+        new CopyPlugin([
+            { from: path.resolve(process.cwd(),'src/static/'), 
+              to: path.resolve(process.cwd(),'dist/static/') },
+          ]),
     ],
     module: {
         rules: [
@@ -34,7 +39,7 @@ module.exports = {
                 use: [
                     MiniCssExtractPlugin.loader,
                     'css-loader',
-                    'postcss-loader'                  //后写的先执行,postcssloader一定要写在后面
+                    'postcss-loader'                //作用是加前缀。后写的先执行,postcssloader一定要写在后面
                 ],
                 exclude: /node_modules/
             },
@@ -53,6 +58,31 @@ module.exports = {
                 ],
                 exclude: /node_modules/
             },
+            {
+                test: /\.(png|jpe?g|gif)$/i,
+                use: [
+                        {
+                        loader: 'url-loader',
+                        options: {
+                            limit: 512,                 //小于512则放到css里，大于512以图片
+                            name: 'images/[name].[ext]',
+                            publicPath: '/'
+                        },
+                    },
+                ],
+            },
+            {
+                test: /\.m?js$/,
+                exclude: /(node_modules|bower_components)/,
+                use: {
+                  loader: 'babel-loader',
+                  options: {
+                    presets: [
+                        '@babel/preset-env'
+                    ]
+                  }
+                }
+              }
         ],
     },
     devServer: {
