@@ -17,6 +17,8 @@ import ReactDOM from 'react-dom'
 //     title: 'React 16.8'
 // })
 
+//创建组建的第一种方式，使用箭头函数，但是这个名字要大写。下面render里面直接写app,就行
+
 
 const App = (props) => {
     return (
