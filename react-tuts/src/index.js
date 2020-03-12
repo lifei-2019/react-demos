@@ -1,29 +1,35 @@
-import React from 'react'
+import React, { Component } from 'react'
 import { render } from 'react-dom'
+import classNames from 'classnames'
+import styled from 'styled-components'
 
-//定义组建的第二种方式，使用类继承React.Component
+import './index.css'
 
-class App extends React.Component{
+const Title = styled.h1`
+    color: #F00
+`
+
+class App extends Component{
     render () {
-        console.log(this.props)
+        const style = { color: '#F00' }
         return (
             <div>
-                <h1>类组件继承</h1>
-                <p>{this.props.desc}</p>
+                <h1>元素中的样式</h1>
+                <ol>
+                    <li style={style}>使用style内联</li>
+                    <li className="has-text-red">使用class的方式，但是在react里class要写成className</li>
+                    <li className={classNames('a',{'b':true,'c':false})}>要动态添加不同的className就可以使用第三方的包叫classNames,比如这个li上只有ab没有c</li>
+                    <Title>style-components的使用</Title>
+                </ol>
             </div>
         )
     }
 }
 
 
-//类组件渲染的原理
-// const app = new App({
-//     desc: '类组件是继承React.Component'
-// }).render
 
-//render是react dom提供的方法，通常只会用一次
 render(
-    <App desc="类组件是继承React.Component" />,
+    <App />,
     document.querySelector('#root')
 )
 
