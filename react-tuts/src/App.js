@@ -46,7 +46,7 @@ export default class App extends Component {
                     {this.state.title}
                 </TodoHeader>
                 <TodoInput  />
-                <TodoList />
+                <TodoList todos={this.state.todos} />
             </Fragment>
         //     <>
         //     <TodoHeader />
