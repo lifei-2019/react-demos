@@ -1,9 +1,11 @@
-import React from 'react'
+import React, { Component } from 'react'
 
-export default function TodoItem() {
-    return (
-        <div>
-            TodoItem
-        </div>
-    )
+export default class TodoItem extends Component {
+   render() {
+       return (
+           <li>
+               {this.props.title}{this.props.isCompleted ? '完成' : '未完成'}
+           </li>
+       )
+   }
 }
