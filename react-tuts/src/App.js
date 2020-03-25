@@ -33,6 +33,39 @@ export default class App extends Component {
             }]
         }
     }
+
+    addTodo = (todoTitle) => {
+        
+        //这样写不对，TODOTitle不是一个数组
+        // this.setState({
+        //     todos: this.state.todos.push({
+        //         id: Math.random,
+        //         title: todoTitle,
+        //         isCompleted: false
+        //     })
+        // })
+        
+        
+        // 这个代码是对的
+        // this.setState({
+        //     todos: this.state.todos.concat({
+        //         id: Math.random(),
+        //         title: todoTitle,
+        //         isCompleted: false
+        //     })
+        // })
+
+        // const newTodos = this.state.todos.slice()
+        const newTodos = [...this.state.todos]
+        newTodos.push({
+            id: Math.random(),
+            title: todoTitle,
+            isCompleted: false
+        })
+        this.setState({
+            todos: newTodos
+        })
+    }
     render() {
         return (
             <Fragment>
@@ -48,7 +81,9 @@ export default class App extends Component {
                     <br></br>
                     {this.state.title}
                 </TodoHeader>
-                <TodoInput  />
+                <TodoInput  
+                    addTodo={this.addTodo}
+                />
                 <TodoList todos={this.state.todos} />
                 <Like></Like>
             </Fragment>
