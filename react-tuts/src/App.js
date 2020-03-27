@@ -66,6 +66,22 @@ export default class App extends Component {
             todos: newTodos
         })
     }
+
+
+
+    onCompletedChange = (id) =>{
+        this.setState((prevState) =>{
+            return{
+                todos: prevState.todos.map(tod =>{
+                    if(tod.id === id){
+                        tod.isCompleted = !tod.isCompleted
+                    }
+                    return tod
+                })
+            }
+        })
+    }
+
     render() {
         return (
             <Fragment>
@@ -76,16 +92,23 @@ export default class App extends Component {
                         return <div key={todo.id}>{todo.title}</div>
                     })
                 }
+
                 <TodoHeader desc={this.state.desc} x={1} y={2}>
                     <i>待办事项列表</i>
                     <br></br>
                     {this.state.title}
                 </TodoHeader>
+
                 <TodoInput  
                     addTodo={this.addTodo}
                 />
-                <TodoList todos={this.state.todos} />
-                <Like></Like>
+
+                <TodoList 
+                todos={this.state.todos} 
+                onCompletedChange={this.onCompletedChange}
+                />
+
+                <Like />
             </Fragment>
         //     <>
         //     <TodoHeader />
