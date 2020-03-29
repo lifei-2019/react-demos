@@ -1,17 +1,17 @@
-import React, { PureComponent } from 'react'
+import React, { Component } from 'react'
 const noop = ()=> {}
 
-export default class TodoItem extends PureComponent {
+export default class TodoItem extends Component {
     
     //老版本是这样
     // constructor(props){
     //     this.state =({
-    //         completedText: props.isCompleted ? 'wancheng' : 'weiwancheng'
+    //         completedText: props.completed ? 'wancheng' : 'weiwancheng'
     //     })
     // }
     // UNSAFE_componentWillReceiveProps(nextProps){
     //     this.setState({
-    //         completedText: nextProps.isCompleted?'wancheng' : 'weiwancheng'
+    //         completedText: nextProps.completed?'wancheng' : 'weiwancheng'
     //     })
     // }
 
@@ -25,7 +25,7 @@ export default class TodoItem extends PureComponent {
     
     static getDerivedStateFromProps(props){
         return{
-            completedText: props.isCompleted ? 'wancheng':'weiwancheng'
+            completedText: props.completed ? 'wancheng':'weiwancheng'
         }
     }
    
@@ -37,25 +37,25 @@ export default class TodoItem extends PureComponent {
        onCompletedChange(id)
    }
    
-//    shouldComponentUpdate(nextProps,nextState){
-//        return (nextProps.isCompleted !== this.props.isCompleted)||(nextProps.xxx != this.props.xxx)
-//    }
+   shouldComponentUpdate(nextProps,nextState){
+       return (nextProps.completed !== this.props.completed)||(nextProps.xxx !== this.props.xxx)
+   }
 
     render() {
         console.log(`TodoItem ${this.props.title} render`)
         const {
-            isCompleted,
+            completed,
             title
         } = this.props
-        //下面的this.props.isCompleted可以改成isCompleted
+        //下面的this.props.completed可以改成completed
        return (
            <li>
               <input 
                 type="checkbox" 
-                checked={isCompleted}
+                checked={completed}
                 onChange={this.handelCheckboxChange}
                 />
-              <span>{title}{this.props.isCompleted ? '完成' : '未完成'}</span> 
+              <span>{title}{this.props.completed ? '完成' : '未完成'}</span> 
            </li>
        )
    }
