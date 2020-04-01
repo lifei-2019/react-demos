@@ -1,5 +1,9 @@
 import React, { Component } from 'react'
 import withCopyright from './withCopyright'
+import { connect} from 'tls'
+
+@withCopyright
+@withRouter
 
 class Another extends Component {
     render() {
@@ -11,4 +15,4 @@ class Another extends Component {
     }
 }
 
-export default withCopyright(Another)
+export default Another
