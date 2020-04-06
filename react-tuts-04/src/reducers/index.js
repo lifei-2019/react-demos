@@ -1,11 +1,7 @@
-const initState = {
-    cart: []
-}
+//合并redux
+import{ combineReducers } from 'redux'
+import cart from './cart'
 
-export default (state = initState, action) => {
-    switch(action.type){
-        
-        default:
-            return state
-    }
-}
+export default combineReducers({
+    cart
+})

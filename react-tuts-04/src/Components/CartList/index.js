@@ -1,7 +1,25 @@
 import React, { Component } from 'react'
 
+import {increment, decrement} from '../../actions/cart'
 export default class CartList extends Component {
+    constructor(){
+        super()
+        this.state={
+            cartList:[]
+        }
+    }
+
+    getState = ()=>{
+        this.setState({
+            cartList: this.props.store.getState().cart
+        })
+    }
+    componentDidMount(){
+        this.getState()
+        this.props.store.subscribe(this.getState)
+    }
     render() {
+        //console.log(this.props)
         return (
             <table>
                 <thead>
@@ -14,16 +32,31 @@ export default class CartList extends Component {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>苹果</td>
-                        <td>8888</td>
-                        <td>
-                            <button>-</button>
-                            <span>20</span>
-                            <button>+</button>
-                        </td>
-                    </tr>
+                    {
+                        this.state.cartList.map(item =>{
+                            return(
+                                <tr key={item.id}>
+                                    <td>{item.id}</td>
+                                    <td>{item.title}</td>
+                                    <td>{item.price}</td>
+                                    <td>
+                                        <button onClick = {
+                                            ()=>{
+                                                this.props.store.dispatch(decrement(item.id))
+                                            }
+                                        }>-</button>
+                                        <span>{item.amount}</span>
+                                        <button onClick = {
+                                            ()=>{
+                                                this.props.store.dispatch(increment(item.id))
+                                            }
+                                        }>+</button>
+                                    </td>
+                                </tr>
+                                
+                            )
+                        })
+                    }
                 </tbody>
             </table>
         )
