@@ -1,4 +1,4 @@
-import actionType from './actionType'
+import actionType from './actionTypes'
 
 //action有两种写法
 //第一种写成一个对象，是一个标准的action，但是传递不了参数

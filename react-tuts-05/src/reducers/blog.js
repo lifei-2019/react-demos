@@ -1,3 +1,6 @@
+import actionTypes from '../actions/actionTypes'
+
+
 const initState = {
   list:[
     {
@@ -13,12 +16,30 @@ const initState = {
       "body": "est rerum tempore vitae\nsequi sint nihil reprehenderit dolor beatae ea dolores neque\nfugiat blanditiis voluptate porro vel nihil molestiae ut reiciendis\nqui aperiam non debitis possimus qui neque nisi nulla"
     }
   ],
-  isloading:false
+  errMsg:'',
+  isLoading: false
 }
 
 export default (state=initState,action) =>{
     switch(action.type){
-        default:
-            return state
+      case actionTypes.START_FETCH_BLOG_LIST:
+        return{
+          ...state,
+          isLoading: true
+        }
+      case actionTypes.FETCH_BLOG_LIST_SUCCCESS:
+        return{
+          ...state,
+          isLoading: false,
+          list: action.payload.list
+        }
+        case actionTypes.FETCH_BLOG_LIST_FAILED:
+          return{
+            ...state,
+            isLoading: false,
+            errMsg: '出错了'
+          }
+      default:
+        return state
     }
 }

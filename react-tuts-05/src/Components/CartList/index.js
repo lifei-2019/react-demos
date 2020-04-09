@@ -46,7 +46,7 @@ import {increment, decrement,decrementAsync} from '../../actions/cart'
 
 //这里的state实际上就是store.getState（）的值
 const mapState = (state) => {
-    console.log(state)
+    //console.log(state)
     //这里return了什么，在组件里就可以通过this.props获取
     return{
         cartList: state.cart

@@ -1,6 +1,6 @@
 //为了避免actionType重复，一般会把actionType放在一个文件里统一进行管理，也可以避免写错actionType
 
-import actionType from '../actions/actionType'
+import actionType from '../actions/actionTypes'
 
 
 //对于这个购物车来说，这里有一个初始化的状态
