@@ -4,11 +4,12 @@ import{ combineReducers } from 'redux'
 
 //引入cart reducer，如果有多个继续引入
 import cart from './cart'
-
+import blog from './blog'
 
 //导出合并后的reducer
 export default combineReducers({
     //把多个reducer作为combineReducers对象参数传入，
     //在外部就可以通过store.getState().cart来获取cartReducer里面的state
-    cart
+    cart,
+    blog
 })

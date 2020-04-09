@@ -1,4 +1,5 @@
-const initState = [
+const initState = {
+  list:[
     {
       "userId": 1,
       "id": 1,
@@ -11,9 +12,11 @@ const initState = [
       "title": "qui est esse",
       "body": "est rerum tempore vitae\nsequi sint nihil reprehenderit dolor beatae ea dolores neque\nfugiat blanditiis voluptate porro vel nihil molestiae ut reiciendis\nqui aperiam non debitis possimus qui neque nisi nulla"
     }
-]
+  ],
+  isloading:false
+}
 
-export default (state,action) =>{
+export default (state=initState,action) =>{
     switch(action.type){
         default:
             return state

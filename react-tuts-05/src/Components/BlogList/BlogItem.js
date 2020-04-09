@@ -1,9 +1,10 @@
 import React from 'react'
 
-export default function BlogItem() {
+export default function BlogItem(props) {
     return (
         <li>
-            BlogItem
+            <h3>{props.title}</h3>
+            <p>{props.body}</p>
         </li>
     )
 }
