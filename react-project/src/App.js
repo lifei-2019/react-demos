@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import {Route,Switch, Redirect} from 'react-router-dom'
 import { adminRouter } from './routes'
-
+import {Frame} from './components'
 
 //装饰器
 // const testHOC = (WrappedComponent) =>{
@@ -22,9 +22,8 @@ import { adminRouter } from './routes'
 class App extends Component {
     render() {
         return (
-            <div>
-               <div>这里是公共部分</div>
-               <Switch>
+            <Frame>
+                <Switch>
                     {
                         adminRouter.map(route =>{
                           return (
@@ -42,7 +41,7 @@ class App extends Component {
                     <Redirect to={adminRouter[0].pathname} from='/admin' exact />
                     <Redirect to="/404" />
                </Switch>
-            </div>
+            </Frame>
         )
     }
 }
