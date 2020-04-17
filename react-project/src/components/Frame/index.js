@@ -23,7 +23,7 @@ class Frame extends Component {
     
 
     render() {
-        console.log(this.props)
+        // console.log(this.props)
         return (
             <Layout style={{minHeight:'100%'}}>
             <Header className="header unicorn-header" >
