@@ -1,13 +1,16 @@
 import React from 'react'
 import { render } from 'react-dom'
 import{ HashRouter as Router, Route,Switch,Redirect} from 'react-router-dom'
+import zhCN from 'antd/es/locale/zh_CN'
 import './index.less'
+import {ConfigProvider} from 'antd'
 
 
 import {mainRoutes} from './routes'
 
 import App from './App'
 render(
+    <ConfigProvider locale={zhCN}>
     <Router>
         <Switch>
             <Route  path="/admin" render={(routerProps)=>{
@@ -24,6 +27,7 @@ render(
             <Redirect to="/admin" from="/" exact />
             <Redirect to="/404" />
         </Switch>
-    </Router>,
+    </Router>
+    </ConfigProvider>,
     document.querySelector('#root')
 )

@@ -61,9 +61,7 @@ class Frame extends Component {
                   className="site-layout-background"
                   style={{
                     background: '#fff',
-                    padding: 24,
                     margin: 0,
-                    minHeight: 280,
                   }}
                 >
                   {this.props.children}
