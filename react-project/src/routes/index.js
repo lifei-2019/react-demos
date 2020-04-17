@@ -24,7 +24,7 @@ export const adminRoutes = [{
 },{
     pathname: '/admin/article',
     component: ArticleList,
-    title: '文章管理',
+    title: '文章列表',
     icon: 'icon-unorderedlist',
     isNav: true,
     exact: true

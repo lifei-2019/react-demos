@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
-import { Layout, Menu, Breadcrumb, } from 'antd'
-// import { Icon } from '@ant-design/compatible';
+import { Layout, Menu,  } from 'antd'
 import { createFromIconfontCN } from '@ant-design/icons';
-
+import { withRouter } from 'react-router-dom'
 
 
 import './frame.less'
@@ -14,18 +13,19 @@ const IconFont = createFromIconfontCN({
   scriptUrl: '//at.alicdn.com/t/font_1760641_a9h0d4e6ket.js',
 });
 
-
-export default class Frame extends Component {
-    onMenuClick =()=>{
-
+@withRouter
+class Frame extends Component {
+    onMenuClick =({key})=>{
+      this.props.history.push(key)
     }
 
 
     
 
     render() {
+        console.log(this.props)
         return (
-            <Layout>
+            <Layout style={{minHeight:'100%'}}>
             <Header className="header unicorn-header" >
               <div className="unicorn-logo" >
                 <img src={logo} alt="独角兽" />
@@ -36,16 +36,15 @@ export default class Frame extends Component {
               <Sider width={200} className="site-layout-background">
                 <Menu
                   mode="inline"
-                  defaultSelectedKeys={['1']}
+                  selectedKeys={[this.props.location.pathname]}
                   onClick={this.onMenuClick}
                   style={{ height: '100%', borderRight: 0 }}
                 >
                   {
                     this.props.menus.map(item => {
                       return (
-                        <Menu.Item key={item.pathname}>
+                        <Menu.Item key={item.pathname} title={item.title} >
                           <IconFont type={item.icon} />
-                          {/* <Icon type={item.icon}/> */}
                           {item.title}
                         </Menu.Item>
                     )
@@ -53,12 +52,11 @@ export default class Frame extends Component {
                   }
                 </Menu>
               </Sider>
-              <Layout style={{ padding: '0 24px 24px' }}>
-                <Breadcrumb style={{ margin: '16px 0' }}>
+              
+              <Layout style={{ padding: '16px' }}>
+                {/* <Breadcrumb style={{ margin: '16px 0' }}>
                   <Breadcrumb.Item>Home</Breadcrumb.Item>
-                  <Breadcrumb.Item>List</Breadcrumb.Item>
-                  <Breadcrumb.Item>App</Breadcrumb.Item>
-                </Breadcrumb>
+                </Breadcrumb> */}
                 <Content
                   className="site-layout-background"
                   style={{
@@ -76,3 +74,6 @@ export default class Frame extends Component {
         )
     }
 }
+
+
+export default Frame

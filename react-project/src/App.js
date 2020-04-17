@@ -33,6 +33,7 @@ class App extends Component {
                             key={route.pathname} 
                             path={route.pathname}
                             exact={route.exact} 
+                            title={route.title}
                             render={(routerProps)=>{
                                 return <route.component {...routerProps} />
                             }}
