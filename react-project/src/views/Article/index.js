@@ -4,7 +4,7 @@ import {Card, Button,Table,Tag} from 'antd'
 
 import { getArticles } from '../../requests'
 
-window.moment=moment
+const ButtonGroup = Button.Group
 
 const titleDisplayMap = {
   id:'id',
@@ -22,13 +22,14 @@ export default class ArticleList extends Component {
       ],
       columns: [
       ],
-      total: 0
+      total: 0,
+      isLoading: false
      }
    } 
   
 
     createColumns =(columnKeys)=>{
-      return columnKeys.map(item => {
+      const columns= columnKeys.map(item => {
         if(item === 'amount'){
           return {
             title:titleDisplayMap[item],
@@ -70,9 +71,26 @@ export default class ArticleList extends Component {
           key:item
         }
       })
+      columns.push({
+        title: '操作',
+        key: 'action',
+        render:()=>{
+          return (
+            <ButtonGroup>
+              <Button size="small" type="primary">编辑</Button>
+              <Button size="small" type="danger">删除</Button>
+            </ButtonGroup>
+          )
+        }
+      })
+      return columns
     }
 
     getData =() =>{
+      this.setState({
+        isLoading:true
+      })
+      
       getArticles()
         .then(resp => {
           const columnKeys = Object.keys(resp[0].list[0])
@@ -81,7 +99,15 @@ export default class ArticleList extends Component {
           this.setState({
             total: resp[0].total,
             dataSource: resp[0].list,
-            columns
+            columns,
+          })
+        })
+        .catch(err =>{
+
+        })
+        .finally(()=>{
+          this.setState({
+            isLoading:false
           })
         })
     }
@@ -101,7 +127,7 @@ export default class ArticleList extends Component {
                 rowKey={record=>record.id} 
                 dataSource={this.state.dataSource} 
                 columns={this.state.columns} 
-                // loading={true}
+                loading={this.state.loading}
                 pagination={{
                     total: this.state.total,
                     hideOnSinglePage:true
