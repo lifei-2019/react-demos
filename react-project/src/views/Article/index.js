@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import moment from 'moment'
 import {Card, Button,Table,Tag} from 'antd'
-
+import XLSX from 'xlsx'
 import { getArticles } from '../../requests'
 
 const ButtonGroup = Button.Group
@@ -23,7 +23,9 @@ export default class ArticleList extends Component {
       columns: [
       ],
       total: 0,
-      isLoading: false
+      isLoading: false,
+      offset:0,
+      limited:10
      }
    } 
   
@@ -91,7 +93,7 @@ export default class ArticleList extends Component {
         isLoading:true
       })
       
-      getArticles()
+      getArticles(this.state.offset,this.state.limited)
         .then(resp => {
           const columnKeys = Object.keys(resp[0].list[0])
           const columns=this.createColumns(columnKeys)
@@ -112,6 +114,57 @@ export default class ArticleList extends Component {
         })
     }
 
+
+
+    onPageChange=(page,pageSize)=>{
+      // console.log(page,pageSize)
+      this.setState({
+        offset:pageSize*(page-1),
+        limited:pageSize
+      },()=>{
+        this.getData()
+      })
+    }
+
+
+
+    onShowSizeChange = (current,size) =>{
+      console.log(current,size)
+      //这里必须仔细问清楚需求，究竟是回到第一页还是留在当前页面
+      this.setState({
+        offset:0,
+        limited:size
+      },()=>{
+        this.getData()
+      })
+    }
+
+
+
+    toExcel=()=>{
+      //在实际的项目中，实际上这个功能是前端发送一个ajax请求到后端，然后后端返回一个文件下载的地址
+      //组合数据
+      const data = [Object.keys(this.state.dataSource[0])] //[['id','title','author','amount','createAt']]
+      for (let i=0;i<this.state.dataSource.length;i++){
+        data.push([
+          this.state.dataSource[i].id,
+          this.state.dataSource[i].title,
+          this.state.dataSource[i].author,
+          this.state.dataSource[i].amount,
+          moment(this.state.dataSource[i].createAt).format('YYYY年MM月DD日 HH:mm:ss秒')
+        ])
+      }
+      // console.log(data)
+      
+      /* convert state to workbook */
+		  const ws = XLSX.utils.aoa_to_sheet(data);
+		  const wb = XLSX.utils.book_new();
+		  XLSX.utils.book_append_sheet(wb, ws, "SheetJS");
+		  /* generate XLSX file and send to client */
+		  XLSX.writeFile(wb, `articles-${this.state.offset/this.state.limited+1}-${moment().format('YYYYMMDDHHmmss')}.xlsx`)
+    }
+
+
     componentDidMount(){
       this.getData()
     }
@@ -122,15 +175,21 @@ export default class ArticleList extends Component {
             <Card 
                 title="文章列表"
                 bordered={false}
-                extra={<Button>导出excel</Button>}  >
+                extra={<Button onClick={this.toExcel}>导出excel</Button>}  >
             <Table
                 rowKey={record=>record.id} 
                 dataSource={this.state.dataSource} 
                 columns={this.state.columns} 
                 loading={this.state.loading}
                 pagination={{
+                    current: this.state.offset/this.state.limited+1,
                     total: this.state.total,
-                    hideOnSinglePage:true
+                    hideOnSinglePage:true,
+                    onChange:this.onPageChange,
+                    showQuickJumper: true,
+                    showSizeChanger:true,
+                    onShowSizeChange: this.onShowSizeChange,
+                    pageSizeOptions:['10','15','20','30']
                 }}
             />
             </Card>
