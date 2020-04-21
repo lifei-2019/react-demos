@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import moment from 'moment'
-import {Card, Button,Table,Tag} from 'antd'
+import {Card, Button,Table,Tag, Modal, Typography} from 'antd'
 import XLSX from 'xlsx'
 import { getArticles } from '../../requests'
 
@@ -76,11 +76,11 @@ export default class ArticleList extends Component {
       columns.push({
         title: '操作',
         key: 'action',
-        render:()=>{
+        render:(record)=>{
           return (
             <ButtonGroup>
               <Button size="small" type="primary">编辑</Button>
-              <Button size="small" type="danger">删除</Button>
+              <Button size="small" danger onClick={this.deleteArticle.bind(this,record.id)}>删除</Button>
             </ButtonGroup>
           )
         }
@@ -163,6 +163,18 @@ export default class ArticleList extends Component {
 		  /* generate XLSX file and send to client */
 		  XLSX.writeFile(wb, `articles-${this.state.offset/this.state.limited+1}-${moment().format('YYYYMMDDHHmmss')}.xlsx`)
     }
+
+    deleteArticle= (id,record)=>{
+      Modal.confirm({
+        title: `此操作不可逆,请谨慎！！！！`,
+        content: <Typography>确定要删除<span style={{color: '#f00'}}>{record.id}</span>吗</Typography>,
+        okText: '别墨迹，快删除',
+        cancelText: '残忍退出'
+      })
+    }
+
+
+
 
 
     componentDidMount(){
