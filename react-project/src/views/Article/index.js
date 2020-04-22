@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import moment from 'moment'
-import {Card, Button,Table,Tag, Modal, Typography} from 'antd'
+import {Card, Button,Table,Tag, Modal, Typography, message} from 'antd'
 import XLSX from 'xlsx'
-import { getArticles } from '../../requests'
+import { getArticles, deleteArticleById } from '../../requests'
 
 const ButtonGroup = Button.Group
 
@@ -25,7 +25,11 @@ export default class ArticleList extends Component {
       total: 0,
       isLoading: false,
       offset:0,
-      limited:10
+      limited:10,
+      deleteArticleTitle:'',
+      isShowArticleModal: false,
+      deleteArticleConfirmLoading: false,
+      deleteArticleID:null
      }
    } 
   
@@ -80,7 +84,7 @@ export default class ArticleList extends Component {
           return (
             <ButtonGroup>
               <Button size="small" type="primary">编辑</Button>
-              <Button size="small" danger onClick={this.deleteArticle.bind(this,record.id)}>删除</Button>
+              <Button size="small" danger onClick={this.showDeleteArticleModal.bind(this,record.id)}>删除</Button>
             </ButtonGroup>
           )
         }
@@ -129,7 +133,7 @@ export default class ArticleList extends Component {
 
 
     onShowSizeChange = (current,size) =>{
-      console.log(current,size)
+      // console.log(current,size)
       //这里必须仔细问清楚需求，究竟是回到第一页还是留在当前页面
       this.setState({
         offset:0,
@@ -164,17 +168,62 @@ export default class ArticleList extends Component {
 		  XLSX.writeFile(wb, `articles-${this.state.offset/this.state.limited+1}-${moment().format('YYYYMMDDHHmmss')}.xlsx`)
     }
 
-    deleteArticle= (id,record)=>{
-      Modal.confirm({
-        title: `此操作不可逆,请谨慎！！！！`,
-        content: <Typography>确定要删除<span style={{color: '#f00'}}>{record.id}</span>吗</Typography>,
-        okText: '别墨迹，快删除',
-        cancelText: '残忍退出'
+    showDeleteArticleModal= (id,record)=>{
+      //使用函数的方式调用，定制化没那么强
+      // Modal.confirm({
+      //   title: `此操作不可逆,请谨慎！！！！`,
+      //   content: <Typography>确定要删除<span style={{color: '#f00'}}>{record.id}</span>吗</Typography>,
+      //   okText: '别墨迹，快删除',
+      //   cancelText: '残忍退出',
+      //   onOk(){
+      //     deleteArticle(id)
+      //       .then(resp=>{
+      //         console.log(resp)
+      //       })
+      //   }
+      // })
+
+      this.setState({
+        isShowArticleModal: true,
+        deleteArticleTitle: record.title,
+        deleteArticleID: record.id
       })
     }
 
 
+    hideDeleteModal=()=>{
+      this.setState({
+        isShowArticleModal:false,
+        deleteArticle:'',
+        deleteArticleConfirmLoading:false
+      })
+    }
 
+
+    deleteArticle=()=>{
+      this.setState({
+        deleteArticleConfirmLoading: true
+      })
+      deleteArticleById(this.state.deleteArticleID)
+        .then(resp =>{
+          message.success(resp.msg)
+          //这里有坑，就形式留在当前页还是到第一页？
+          //如果是到第一页
+          this.setState({
+            offset:0
+          },()=>{
+            this.getData()
+          })
+        })
+        .finally(()=>{
+          this.setState({
+            deleteArticleConfirmLoading: false,
+            isShowArticleModal:false
+          })
+        }
+
+        )
+    }
 
 
     componentDidMount(){
@@ -204,6 +253,16 @@ export default class ArticleList extends Component {
                     pageSizeOptions:['10','15','20','30']
                 }}
             />
+            <Modal
+              title='此操作不可逆，请谨慎！！'
+              visible={this.state.isShowArticleModal}
+              onCancel= {this.hideDeleteModal}
+              confirmLoading={this.state.deleteArticleConfirmLoading}
+              onOk={this.deleteArticle}
+            >
+              <Typography>
+                确定要删除<span style={{color: '#f00'}}>{this.state.showDeleteArticleModal}</span>吗</Typography>,
+            </Modal>
             </Card>
         )
     }
