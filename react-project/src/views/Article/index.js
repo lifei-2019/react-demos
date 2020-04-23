@@ -84,7 +84,7 @@ export default class ArticleList extends Component {
           return (
             <ButtonGroup>
               <Button size="small" type="primary">编辑</Button>
-              <Button size="small" danger onClick={this.showDeleteArticleModal.bind(this,record.id)}>删除</Button>
+              <Button size="small" danger onClick={this.showDeleteArticleModal.bind(this,record)}>删除</Button>
             </ButtonGroup>
           )
         }
@@ -168,7 +168,7 @@ export default class ArticleList extends Component {
 		  XLSX.writeFile(wb, `articles-${this.state.offset/this.state.limited+1}-${moment().format('YYYYMMDDHHmmss')}.xlsx`)
     }
 
-    showDeleteArticleModal= (id,record)=>{
+    showDeleteArticleModal= (record,id)=>{
       //使用函数的方式调用，定制化没那么强
       // Modal.confirm({
       //   title: `此操作不可逆,请谨慎！！！！`,
@@ -182,7 +182,7 @@ export default class ArticleList extends Component {
       //       })
       //   }
       // })
-
+      console.log(record.title)
       this.setState({
         isShowArticleModal: true,
         deleteArticleTitle: record.title,
@@ -261,7 +261,7 @@ export default class ArticleList extends Component {
               onOk={this.deleteArticle}
             >
               <Typography>
-                确定要删除<span style={{color: '#f00'}}>{this.state.showDeleteArticleModal}</span>吗</Typography>,
+                确定要删除<span style={{color: '#f00'}}>{this.state.deleteArticleTitle}</span>吗</Typography>,
             </Modal>
             </Card>
         )
