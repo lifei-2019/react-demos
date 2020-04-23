@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import moment from 'moment'
-import {Card, Button,Table,Tag, Modal, Typography, message} from 'antd'
+import {Card, Button,Table,Tag, Modal, Typography, message, Tooltip} from 'antd'
 import XLSX from 'xlsx'
 import { getArticles, deleteArticleById } from '../../requests'
+import { withRouter } from 'react-router-dom'
 
 const ButtonGroup = Button.Group
 
@@ -13,8 +14,8 @@ const titleDisplayMap = {
   createAt: '创作时间',
   amount: '阅读量'
 }
-
-export default class ArticleList extends Component {
+@withRouter
+class ArticleList extends Component {
    constructor() {
      super()
      this.state = {
@@ -53,7 +54,11 @@ export default class ArticleList extends Component {
               // }
               // return<Tag color={titleMap{titleKey}}>{record.titleKey}</Tag>
 
-              return <Tag color={amount>200 ? 'red' : 'green'} >{record.amount}</Tag>
+              return (
+                <Tooltip title={amount>200 ? '超过200' : '没超过200'}>
+                  <Tag color={amount>200 ? 'red' : 'green'} >{record.amount}</Tag>
+                </Tooltip>
+              )
             }
           }
         }
@@ -83,7 +88,7 @@ export default class ArticleList extends Component {
         render:(record)=>{
           return (
             <ButtonGroup>
-              <Button size="small" type="primary">编辑</Button>
+              <Button size="small" type="primary" onClick={this.toEdit.bind(this,record)}>编辑</Button>
               <Button size="small" danger onClick={this.showDeleteArticleModal.bind(this,record)}>删除</Button>
             </ButtonGroup>
           )
@@ -226,6 +231,11 @@ export default class ArticleList extends Component {
     }
 
 
+    toEdit=(record) => {
+      console.log(this.props)
+      this.props.history.push(`/admin/article/edit/${record.id}`)
+    }
+
     componentDidMount(){
       this.getData()
     }
@@ -267,3 +277,5 @@ export default class ArticleList extends Component {
         )
     }
 }
+
+export default ArticleList
