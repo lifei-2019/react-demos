@@ -56,7 +56,11 @@ class Edit extends Component {
                     <Form
                         {...formItemLayout}
                         onFinish={onFinish}
-                        initialValues={{}}
+                        initialValues={
+                            {
+                                title: "张三李四王二麻子"
+                            }
+                        }
                         ref={this.formRef}
                     >
                     <Form.Item
