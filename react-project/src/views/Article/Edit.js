@@ -1,8 +1,10 @@
 import React, { Component, createRef } from 'react'
-
-import {Form, Input, Card, Button, DatePicker} from 'antd'
+import { withRouter}from 'react-router-dom'
+import {Form, Input, Card, Button, DatePicker,Spin,message} from 'antd'
 import E from 'wangeditor'
 import './edit.less'
+import moment from 'moment'
+import {getArticleById,saveArticle} from '../../requests'
 
 const formItemLayout ={
     labelCol:{
@@ -19,21 +21,24 @@ const tailFormItemLayout = {
     }
   };
 
-const onFinish = values => {
-    console.log('Received values of form: ', values);
-};
 
+
+
+@withRouter
 class Edit extends Component {
     constructor(){
         super()
         this.editorRef = createRef()
+        this.state={
+            isLoading:false
+        }
     }
     formRef = React.createRef();
     
     initEditor=()=>{
         this.editor = new E(this.editorRef.current)
         this.editor.customConfig.onchange= (html)=>{
-            console.log(this)
+            
             this.formRef.current.setFieldsValue({
                 content:html
             })
@@ -41,18 +46,58 @@ class Edit extends Component {
         this.editor.create()
 
     }
+
+    
     componentDidMount(){
+        this.setState({
+            isLoading:false
+        })
         this.initEditor()
+        
+        getArticleById(this.props.match.params.id)
+        .then(resp=>{
+            const {id,...data} =resp
+            data.createAt=moment(resp.createAt)
+            this.formRef.current.setFieldsValue(data)
+            this.editor.txt.html(data.content)
+        })
+        .finally(() => {
+            this.setState=({
+                isLoading: false
+            })
+        })
     }
 
     render() {
+        const onFinish = values => {
+            console.log('Received values of form: ', values)
+            // console.log(this.props)
+
+            this.props.form.validateFields((err,values)=>{
+                if(!err){
+                    const data = Object.assign({},values,{
+                        createAt: values.createAt.valueOf()
+                    })
+                    //在这里可以处理更多的逻辑
+                    saveArticle(this.props.match.params.id,data)
+                        .then(resp=>{
+                            message.success(resp.msg)
+                            //如果需要跳转
+                            this.props.history.push('/admin/article')
+                        })
+                        .finally()
+                }
+            })
+            
+            
+        }
         return (
             <Card 
                 title="编辑文章"
                 bordered={false}
-                extra={<Button >取消</Button>}  
+                extra={<Button onClick={this.props.history.goBack}>取消</Button>}  
                 >
-
+                    <Spin spinning={this.state.isLoading}>
                     <Form
                         {...formItemLayout}
                         onFinish={onFinish}
@@ -125,6 +170,7 @@ class Edit extends Component {
                     </Form.Item>
                     
                     </Form>
+                    </Spin>
             </Card>
         )
     }

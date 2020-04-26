@@ -88,7 +88,7 @@ class ArticleList extends Component {
         render:(record)=>{
           return (
             <ButtonGroup>
-              <Button size="small" type="primary" onClick={this.toEdit.bind(this,record)}>编辑</Button>
+              <Button size="small" type="primary" onClick={this.toEdit.bind(this,record.id)}>编辑</Button>
               <Button size="small" danger onClick={this.showDeleteArticleModal.bind(this,record)}>删除</Button>
             </ButtonGroup>
           )
@@ -231,9 +231,9 @@ class ArticleList extends Component {
     }
 
 
-    toEdit=(record) => {
-      console.log(this.props)
-      this.props.history.push(`/admin/article/edit/${record.id}`)
+    toEdit=(id) => {
+      // console.log(this.props)
+      this.props.history.push(`/admin/article/edit/${id}`)
     }
 
     componentDidMount(){
