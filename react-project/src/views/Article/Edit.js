@@ -47,6 +47,21 @@ class Edit extends Component {
 
     }
 
+    onFinish = (values) => {
+        console.log('Received values of form: ', values)
+        // console.log(this.formRef)
+        const data = Object.assign({},values,{
+            createAt: values.createAt.valueOf()
+        })
+        //在这里可以处理更多的逻辑
+        saveArticle(this.props.match.params.id,data)
+            .then(resp=>{
+                message.success(resp.msg)
+                //如果需要跳转
+                this.props.history.push('/admin/article')
+            })
+            .finally()
+    }
     
     componentDidMount(){
         this.setState({
@@ -69,28 +84,10 @@ class Edit extends Component {
     }
 
     render() {
-        const onFinish = values => {
-            console.log('Received values of form: ', values)
-            // console.log(this.props)
-
-            this.props.form.validateFields((err,values)=>{
-                if(!err){
-                    const data = Object.assign({},values,{
-                        createAt: values.createAt.valueOf()
-                    })
-                    //在这里可以处理更多的逻辑
-                    saveArticle(this.props.match.params.id,data)
-                        .then(resp=>{
-                            message.success(resp.msg)
-                            //如果需要跳转
-                            this.props.history.push('/admin/article')
-                        })
-                        .finally()
-                }
-            })
+        
             
             
-        }
+        
         return (
             <Card 
                 title="编辑文章"
@@ -100,7 +97,7 @@ class Edit extends Component {
                     <Spin spinning={this.state.isLoading}>
                     <Form
                         {...formItemLayout}
-                        onFinish={onFinish}
+                        onFinish={this.onFinish}
                         initialValues={
                             {
                                 title: "张三李四王二麻子"
