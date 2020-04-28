@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import { Layout, Menu,  } from 'antd'
-import { createFromIconfontCN } from '@ant-design/icons';
+import { Layout, Menu, Dropdown, Avatar,Badge } from 'antd'
+import { createFromIconfontCN,DownOutlined } from '@ant-design/icons';
 import { withRouter } from 'react-router-dom'
 
 
@@ -19,6 +19,32 @@ class Frame extends Component {
       this.props.history.push(key)
     }
 
+    onDropdownMenuClick=({key})=>{
+      console.log({key})
+      this.props.history.push(key)
+    }
+
+    menu = (
+      <Menu onClick={this.onDropdownMenuClick}>
+        <Menu.Item
+          key="/admin/notifactions"
+        >
+            <Badge dot>
+            通知中心
+            </Badge>
+        </Menu.Item>
+        <Menu.Item
+          key="/admin/settings"
+        >
+            个人设置
+        </Menu.Item>
+        <Menu.Item
+          key="/login"
+        >
+            退出登录
+        </Menu.Item>
+      </Menu>
+    )
 
     
 
@@ -31,6 +57,17 @@ class Frame extends Component {
             <Header className="header unicorn-header" >
               <div className="unicorn-logo" >
                 <img src={logo} alt="独角兽" />
+              </div>
+              <div >
+              <Dropdown overlay={this.menu}>
+                <div style={{display:'flex',alignItems: 'center'}}>
+                  <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
+                  <span>欢迎您！李飞</span>
+                  <Badge count={10} offset={[-10,-10]}>
+                    <DownOutlined />
+                  </Badge>
+                </div>
+              </Dropdown>
               </div>
             </Header>
             
