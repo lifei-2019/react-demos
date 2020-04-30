@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Layout, Menu, Dropdown, Avatar,Badge } from 'antd'
 import { createFromIconfontCN,DownOutlined } from '@ant-design/icons';
 import { withRouter } from 'react-router-dom'
-
+import {connect} from 'react-redux'
 
 import './frame.less'
 import logo from './logo.png'
@@ -11,8 +11,17 @@ const { Header, Content, Sider } = Layout
 
 const IconFont = createFromIconfontCN({
   scriptUrl: '//at.alicdn.com/t/font_1760641_a9h0d4e6ket.js',
-});
+})
 
+
+const mapState = state =>{
+  return{
+    notificationsCount:state.notifications.list.filter(item=>item.hasRead === false).length
+  }
+}
+
+
+@connect(mapState)
 @withRouter
 class Frame extends Component {
     onMenuClick =({key})=>{
@@ -27,9 +36,9 @@ class Frame extends Component {
     menu = (
       <Menu onClick={this.onDropdownMenuClick}>
         <Menu.Item
-          key="/admin/notifactions"
+          key="/admin/notifications"
         >
-            <Badge dot>
+            <Badge dot={Boolean(this.props.notificationsCount)}>
             通知中心
             </Badge>
         </Menu.Item>
@@ -63,7 +72,7 @@ class Frame extends Component {
                 <div style={{display:'flex',alignItems: 'center'}}>
                   <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
                   <span>欢迎您！李飞</span>
-                  <Badge count={10} offset={[-10,-10]}>
+                  <Badge count={this.props.notificationsCount} offset={[-10,-10]}>
                     <DownOutlined />
                   </Badge>
                 </div>

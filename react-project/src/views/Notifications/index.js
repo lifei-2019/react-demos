@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import{Card,Button,List,Badge,Avatar} from 'antd'
-
+import {connect} from 'react-redux'
 const data = [
     {
       title: 'Ant Design Title 1',
@@ -16,27 +16,38 @@ const data = [
     },
   ]
 
-export default class Notifactions extends Component {
+const mapState = state =>{
+  const {
+    list=[]
+  } = state.notifications
+  return {
+    list
+  }
+}
+
+@connect(mapState)
+class Notifications extends Component {
     render() {
+      // console.log(this.props)
         return (
             <Card 
             title="通知中心"
             bordered={false}
-            extra={<Button>全部标为已读</Button>}
+            extra={<Button disabled={this.props.list.every(item=>item.hasRead === true)}>全部标为已读</Button>}
             >
                 <List
                     itemLayout="horizontal"
-                    dataSource={data}
+                    dataSource={this.props.list}
                     renderItem={item => (
                     <List.Item
                         extra={
-                            <Button>标为已读</Button>
+                            item.hasRead ? null :<Button>标为已读</Button>
                         }
                     >
                         <List.Item.Meta
                             avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
-                    title={<Badge dot>{item.title}</Badge>}
-                            description="Ant Design, a design language for background applications, is refined by Ant UED Team"
+                            title={<Badge dot={!item.hasRead}>{item.title}</Badge>}
+                            description={item.desc}
                         />
                     </List.Item>
     )}
@@ -45,3 +56,5 @@ export default class Notifactions extends Component {
         )
     }
 }
+
+export default Notifications

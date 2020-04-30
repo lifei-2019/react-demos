@@ -5,7 +5,7 @@ import {
     Settings,
     ArticleList,
     ArticleEdit,
-    Notifactions
+    Notifications
 } from '../views'
 
 export const mainRoutes = [{
@@ -39,6 +39,6 @@ export const adminRoutes = [{
     icon: 'icon-Settingscontroloptions',
     isNav: true
 },{
-    pathname: '/admin/notifactions',
-    component: Notifactions,
+    pathname: '/admin/notifications',
+    component: Notifications,
 },]
