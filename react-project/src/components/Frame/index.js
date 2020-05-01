@@ -6,6 +6,8 @@ import {connect} from 'react-redux'
 
 import './frame.less'
 import logo from './logo.png'
+import {getNotificationList} from '../../actions/notifications'
+
 // const { SubMenu } = Menu
 const { Header, Content, Sider } = Layout
 
@@ -21,19 +23,23 @@ const mapState = state =>{
 }
 
 
-@connect(mapState)
+@connect(mapState,{getNotificationList})
 @withRouter
 class Frame extends Component {
+    componentDidMount(){
+      this.props.getNotificationList()
+    }
+
     onMenuClick =({key})=>{
       this.props.history.push(key)
     }
 
     onDropdownMenuClick=({key})=>{
-      console.log({key})
+      // console.log({key})
       this.props.history.push(key)
     }
 
-    menu = (
+    renderDropdown = ()=> (
       <Menu onClick={this.onDropdownMenuClick}>
         <Menu.Item
           key="/admin/notifications"
@@ -68,7 +74,7 @@ class Frame extends Component {
                 <img src={logo} alt="独角兽" />
               </div>
               <div >
-              <Dropdown overlay={this.menu}>
+              <Dropdown overlay={this.renderDropdown()}>
                 <div style={{display:'flex',alignItems: 'center'}}>
                   <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
                   <span>欢迎您！李飞</span>

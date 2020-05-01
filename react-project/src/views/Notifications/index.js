@@ -1,47 +1,49 @@
 import React, { Component } from 'react'
-import{Card,Button,List,Badge,Avatar} from 'antd'
+import{Card,Button,List,Badge,Avatar,Spin} from 'antd'
 import {connect} from 'react-redux'
-const data = [
-    {
-      title: 'Ant Design Title 1',
-    },
-    {
-      title: 'Ant Design Title 2',
-    },
-    {
-      title: 'Ant Design Title 3',
-    },
-    {
-      title: 'Ant Design Title 4',
-    },
-  ]
+
+import {markNotificationAsReadById,markAllNotificationAsRead}from '../../actions/notifications'
 
 const mapState = state =>{
   const {
-    list=[]
+    list,
+    isLoading
   } = state.notifications
   return {
-    list
+    list,
+    isLoading
   }
 }
 
-@connect(mapState)
+@connect(mapState,{markNotificationAsReadById,markAllNotificationAsRead})
 class Notifications extends Component {
     render() {
       // console.log(this.props)
+      console.log(this.props.isLoading)
         return (
+          <Spin spinning={this.props.isLoading}>
             <Card 
             title="通知中心"
             bordered={false}
-            extra={<Button disabled={this.props.list.every(item=>item.hasRead === true)}>全部标为已读</Button>}
-            >
+            extra={
+              <Button 
+                disabled={this.props.list.every(item=>item.hasRead === true)}
+                onClick={this.props.markAllNotificationAsRead}
+            >全部标为已读</Button>}
+              >
                 <List
                     itemLayout="horizontal"
                     dataSource={this.props.list}
                     renderItem={item => (
                     <List.Item
                         extra={
-                            item.hasRead ? null :<Button>标为已读</Button>
+                            item.hasRead 
+                              ? 
+                              null 
+                              :
+                              <Button 
+                                onClick={this.props.markNotificationAsReadById.bind(this,item.id)}
+                              >标为已读</Button>
                         }
                     >
                         <List.Item.Meta
@@ -53,6 +55,7 @@ class Notifications extends Component {
     )}
   />
             </Card>
+            </Spin>
         )
     }
 }
