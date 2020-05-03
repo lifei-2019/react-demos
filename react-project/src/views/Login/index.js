@@ -45,17 +45,14 @@ class Login extends Component {
                 <Form.Item name="remember" valuePropName="checked" noStyle>
                   <Checkbox>记住我</Checkbox>
                 </Form.Item>
-        
-                <a className="login-form-forgot" href="">
                   Forgot password
-                </a>
               </Form.Item>
         
               <Form.Item>
                 <Button type="primary" htmlType="submit" className="login-form-button">
                   登录
                 </Button>
-                Or <a href="">register now!</a>
+                Or register now!
               </Form.Item>
             </Form>
           </Card>
