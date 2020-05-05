@@ -1,12 +1,14 @@
 import actionTypes from '../actions/actionTypes'
 
+const isLogin = (
+    Boolean(window.localStorage.setItem('authToken')) || Boolean(window.sessionStorage.setItem('authToken'))
+)
+const userInfo = JSON.parse(window.localStorage.setItem('authToken')) || JSON.parse(window.sessionStorage.setItem('authToken'))
+
 const initState={
-    id:'',
-    displayName:'',
-    avatar:'',
-    role:'',
-    isLogin: false,
-    isLoading: false
+    ...userInfo,
+    isLogin,
+    isLoading:false
 }
 export default(state=initState,action)=>{
     console.log(action)
@@ -24,7 +26,13 @@ export default(state=initState,action)=>{
                 isLoading:false
             }
         case actionTypes.LOGIN_FAILED:
-            return initState
+            return {
+                id:'',
+                displayName:'',
+                avatar:'',
+                isLogin: false,
+                isLoading:false
+            }
         default:
             return state
     }

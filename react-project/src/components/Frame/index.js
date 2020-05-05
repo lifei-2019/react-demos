@@ -8,6 +8,8 @@ import './frame.less'
 import logo from './logo.png'
 import {getNotificationList} from '../../actions/notifications'
 
+import {logout} from '../../actions/user'
+
 // const { SubMenu } = Menu
 const { Header, Content, Sider } = Layout
 
@@ -18,12 +20,14 @@ const IconFont = createFromIconfontCN({
 
 const mapState = state =>{
   return{
-    notificationsCount:state.notifications.list.filter(item=>item.hasRead === false).length
+    notificationsCount:state.notifications.list.filter(item=>item.hasRead === false).length,
+    avatar:state.user.avatar,
+    displayName: state.user.displayName
   }
 }
 
 
-@connect(mapState,{getNotificationList})
+@connect(mapState,{getNotificationList, logout})
 @withRouter
 class Frame extends Component {
     componentDidMount(){
@@ -36,7 +40,12 @@ class Frame extends Component {
 
     onDropdownMenuClick=({key})=>{
       // console.log({key})
-      this.props.history.push(key)
+      if(key === '/login'){
+        this.props.logout()
+      }else{
+        this.props.history.push(key)
+      }
+      
     }
 
     renderDropdown = ()=> (
@@ -76,8 +85,8 @@ class Frame extends Component {
               <div >
               <Dropdown overlay={this.renderDropdown()}>
                 <div style={{display:'flex',alignItems: 'center'}}>
-                  <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
-                  <span>欢迎您！李飞</span>
+                  <Avatar src={this.props.avatar} />
+                  <span>欢迎您！{this.props.displayName}</span>
                   <Badge count={this.props.notificationsCount} offset={[-10,-10]}>
                     <DownOutlined />
                   </Badge>
