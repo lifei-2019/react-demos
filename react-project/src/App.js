@@ -24,7 +24,8 @@ const menus = adminRoutes.filter(route => route.isNav === true)
 
 
 const mapSate=state=>({
-    isLogin:state.user.isLogin
+    isLogin:state.user.isLogin,
+    role:state.user.role
 })
 @connect(mapSate)
 class App extends Component {
@@ -43,7 +44,11 @@ class App extends Component {
                             exact={route.exact} 
                             title={route.title}
                             render={(routerProps)=>{
-                                return <route.component {...routerProps} />
+                                // console.log(route.roles)
+                                // console.log(this.props.role)
+                                // console.log(route.roles.includes(this.props.role))
+                                const hasPermission =route.roles.includes(this.props.role)
+                                return hasPermission?<route.component {...routerProps} />:<Redirect to="/admin/noauth" />
                             }}
                             />
                           )

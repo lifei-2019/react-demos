@@ -1,9 +1,9 @@
 import actionTypes from '../actions/actionTypes'
 
 const isLogin = (
-    Boolean(window.localStorage.setItem('authToken')) || Boolean(window.sessionStorage.setItem('authToken'))
+    Boolean(window.localStorage.getItem('authToken')) || Boolean(window.sessionStorage.getItem('authToken'))
 )
-const userInfo = JSON.parse(window.localStorage.setItem('authToken')) || JSON.parse(window.sessionStorage.setItem('authToken'))
+const userInfo = JSON.parse(window.localStorage.getItem('userInfo')) || JSON.parse(window.sessionStorage.getItem('userInfo'))
 
 const initState={
     ...userInfo,
@@ -11,7 +11,7 @@ const initState={
     isLoading:false
 }
 export default(state=initState,action)=>{
-    console.log(action)
+    // console.log(action)
     switch(action.type){
         case actionTypes.START_LOGIN:
             return{
@@ -31,7 +31,8 @@ export default(state=initState,action)=>{
                 displayName:'',
                 avatar:'',
                 isLogin: false,
-                isLoading:false
+                isLoading:false,
+                role:''
             }
         default:
             return state

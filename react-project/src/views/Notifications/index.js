@@ -19,7 +19,7 @@ const mapState = state =>{
 class Notifications extends Component {
     render() {
       // console.log(this.props)
-      console.log(this.props.isLoading)
+      // console.log(this.props.isLoading)
         return (
           <Spin spinning={this.props.isLoading}>
             <Card 
