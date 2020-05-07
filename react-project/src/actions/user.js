@@ -65,3 +65,12 @@ export const login =(userInfo)=>{
             })
     }
 }
+
+export const changeAvatar = (avatarUrl)=>{
+    return {
+        type: actionTypes.CHANGE_AVATAR,
+        payload:{
+            avatarUrl
+        }
+    }
+}

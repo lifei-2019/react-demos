@@ -97,6 +97,8 @@ class ArticleList extends Component {
       return columns
     }
 
+
+
     getData =() =>{
       this.setState({
         isLoading:true
@@ -107,6 +109,8 @@ class ArticleList extends Component {
           const columnKeys = Object.keys(resp[0].list[0])
           const columns=this.createColumns(columnKeys)
           // console.log(columns)
+          //如果请求完成之后组件已经销毁，就不需要在设置state
+          if(!this.updater.isMounted(this)) return
           this.setState({
             total: resp[0].total,
             dataSource: resp[0].list,
@@ -117,6 +121,7 @@ class ArticleList extends Component {
 
         })
         .finally(()=>{
+          if(!this.updater.isMounted(this)) return
           this.setState({
             isLoading:false
           })
@@ -239,8 +244,7 @@ class ArticleList extends Component {
     componentDidMount(){
       this.getData()
     }
-  
-  
+    
     render() {
         return (
             <Card 
